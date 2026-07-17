@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+env/
+model/*.joblib
+
