@@ -2,6 +2,7 @@
 
 A Machine Learning web application that predicts the selling price of a used car based on its specifications. The application is built using **Python, Scikit-learn, Streamlit, and Random Forest Regressor**.
 
+Live Demo: https://carpriceprediction-djvpnrrmb9mkcsc49ru8on.streamlit.app/
 ---
 
 ## 📌 Features
