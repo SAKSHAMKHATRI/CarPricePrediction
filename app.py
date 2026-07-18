@@ -156,4 +156,10 @@ if predict:
 
     except Exception as e:
         st.error(f"Prediction Error: {e}")
-    
+
+
+st.markdown("---")
+st.markdown(
+    "<div style='text-align:center;color:gray;'>Developed by <b>Saksham Khatri</b></div>",
+    unsafe_allow_html=True
+)
