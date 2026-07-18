@@ -112,14 +112,14 @@ col1, col2 = st.columns(2)
 col1, col2 = st.columns(2)
 
 with col1:
-    st.metric("⛽ Fuel Type", fuel_type)
-    st.metric("⚙️ Transmission", transmission_type)
-    st.metric("💺 Seats", seats)
+    st.info(f"⛽ Fuel Type: {fuel_type}")
+    st.info(f"⚙️ Transmission: {transmission_type}")
+    st.info(f"💺 Seats: {seats}")
 
 with col2:
-    st.metric("🔧 Engine", f"{engine:.0f} CC")
-    st.metric("⚡ Max Power", f"{max_power:.0f} bhp")
-    st.metric("🛣️ Mileage", f"{mileage:.2f} km/l")
+    st.info(f"🔧 Engine: {engine:.0f} CC")
+    st.info(f"⚡ Max Power: {max_power:.0f} bhp")
+    st.info(f"🛣️ Mileage: {mileage:.2f} km/l")
 
 # Predict Button
 predict = st.button(
@@ -145,14 +145,15 @@ if predict:
 
     try:
         prediction = model.predict(input_data)[0]
+
         st.markdown(f"""
-<div class="result-box">
-    <h3>💰 Estimated Selling Price</h3>
-    <div class="result-price">
-        ₹ {prediction:,.0f}
-    </div>
-</div>
-""", unsafe_allow_html=True)
+        <div class="result-box">
+            <h3>💰 Estimated Selling Price</h3>
+            <div class="result-price">
+                ₹ {prediction:,.0f}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     except Exception as e:
         st.error(f"Prediction Error: {e}")
