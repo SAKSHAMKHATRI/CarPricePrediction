@@ -13,6 +13,49 @@ st.set_page_config(
     page_icon="🚗",
     layout="centered"
 )
+st.markdown("""
+<style>
+
+.block-container{
+    padding-top:2rem;
+    padding-bottom:2rem;
+}
+
+.main-title{
+    font-size:42px;
+    font-weight:700;
+    text-align:center;
+}
+
+.sub-title{
+    text-align:center;
+    color:#9ca3af;
+    font-size:18px;
+    margin-bottom:30px;
+}
+
+.result-box{
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    border:1px solid #334155;
+}
+
+.result-price{
+    font-size:36px;
+    font-weight:bold;
+    color:#00E676;
+}
+
+.footer{
+    text-align:center;
+    color:gray;
+    margin-top:40px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 st.title("🚗 Used Car Price Prediction")
 st.write("Enter the car details below to predict its selling price.")
@@ -49,60 +92,42 @@ km_driven = st.number_input(
 )
 
 # Fuel Type
-fuel_type = st.selectbox(
-    "Fuel Type",
-    sorted(df["fuel_type"].unique())
-)
+car_data = df[
+    (df["brand"] == brand) &
+    (df["model"] == model_name)
+]
+st.markdown("### 🚘 Car Specifications")
+fuel_type = car_data["fuel_type"].mode()[0]
+seller_type = car_data["seller_type"].mode()[0]
+transmission_type = car_data["transmission_type"].mode()[0]
 
-# Seller Type
-seller_type = st.selectbox(
-    "Seller Type",
-    sorted(df["seller_type"].unique())
-)
+mileage = car_data["mileage"].mean()
+engine = car_data["engine"].mean()
+max_power = car_data["max_power"].mean()
 
-# Transmission Type
-transmission_type = st.selectbox(
-    "Transmission Type",
-    sorted(df["transmission_type"].unique())
-)
+seats = int(car_data["seats"].mode()[0])
 
-# Mileage
-mileage = st.number_input(
-    "Mileage (km/l)",
-    min_value=0.0,
-    value=20.0,
-    step=0.1
-)
+col1, col2 = st.columns(2)
 
-# Engine
-engine = st.number_input(
-    "Engine (CC)",
-    min_value=500,
-    max_value=7000,
-    value=1200,
-    step=100
-)
+col1, col2 = st.columns(2)
 
-# Max Power
-max_power = st.number_input(
-    "Max Power (bhp)",
-    min_value=20.0,
-    max_value=700.0,
-    value=80.0,
-    step=1.0
-)
+with col1:
+    st.metric("⛽ Fuel Type", fuel_type)
+    st.metric("⚙️ Transmission", transmission_type)
+    st.metric("💺 Seats", seats)
 
-# Seats
-seats = st.number_input(
-    "Seats",
-    min_value=2,
-    max_value=10,
-    value=5,
-    step=1
-)
+with col2:
+    st.metric("🔧 Engine", f"{engine:.0f} CC")
+    st.metric("⚡ Max Power", f"{max_power:.0f} bhp")
+    st.metric("🛣️ Mileage", f"{mileage:.2f} km/l")
+
 # Predict Button
-# Predict Button
-if st.button("Predict Price"):
+predict = st.button(
+    "🚀 Predict Selling Price",
+    use_container_width=True
+)
+
+if predict:
 
     input_data = pd.DataFrame({
         "brand": [brand],
@@ -120,7 +145,14 @@ if st.button("Predict Price"):
 
     try:
         prediction = model.predict(input_data)[0]
-        st.success(f"Estimated Selling Price: ₹ {prediction:,.0f}")
+        st.markdown(f"""
+<div class="result-box">
+    <h3>💰 Estimated Selling Price</h3>
+    <div class="result-price">
+        ₹ {prediction:,.0f}
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
     except Exception as e:
         st.error(f"Prediction Error: {e}")
